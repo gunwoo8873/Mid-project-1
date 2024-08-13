@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  bank-redis:
+    build: ./Redis
+    
+  bank-mysql:
+    build: ./MySQL
+
+  bank-backend:
+    build: ./Backend
+
+  bank-frontend:
+    build: ./Frontend
+    
+  bank-nginx:
+    build: ./Nginx

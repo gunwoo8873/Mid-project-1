@@ -1,0 +1,300 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bank-namespace
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-server
+  namespace: bank-namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:latest
+        volumeMounts:
+        - mountPath: /data
+          name: redis-data
+        ports:
+        - containerPort: 6379
+      volumes:
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: redis-data-pvc
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-server
+  namespace: bank-namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:latest
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "abc123"
+        - name: MYSQL_DATABASE
+          value: "mybank"
+        - name: MYSQL_USER
+          value: "student"
+        - name: MYSQL_PASSWORD
+          value: "abc123"
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-data
+      volumes:
+      - name: mysql-data
+        persistentVolumeClaim:
+          claimName: mysql-data-pvc
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-server
+  namespace: bank-namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: your-backend-image:latest
+        env:
+        - name: PORT
+          value: "8000"
+        - name: NODE_ENV
+          value: "production"
+        - name: MYSQL_HOST
+          value: "mysql-server"
+        - name: MYSQL_PORT
+          value: "3306"
+        - name: MYSQL_DATABASE
+          value: "mybank"
+        - name: MYSQL_USER
+          value: "student"
+        - name: MYSQL_PASSWORD
+          value: "abc123"
+        - name: REDIS_HOST
+          value: "redis-server"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_SECRET
+          value: "20240703MiniprojectSecretKey"
+        ports:
+        - containerPort: 8000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-server
+  namespace: bank-namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: your-frontend-image:latest
+        env:
+        - name: PORT
+          value: "3000"
+        - name: NODE_ENV
+          value: "production"
+        - name: JWT_SECRET
+          value: "thisIsMySecretKey"
+        - name: BACKEND_HOST
+          value: "backend-server"
+        - name: BACKEND_PORT
+          value: "8000"
+        - name: CLIENT_ID
+          value: "_6vvNxz9b7hiBBvaP7T9"
+        - name: CLIENT_SECRET
+          value: "j2JaqWr4EH"
+        - name: REDIRECT_URI
+          value: "https://192.168.6.99/naverlogin/login"
+        - name: JAVASCRIPT_APPKEY
+          value: "4b5ecb6281d617d7a988622ad24d251b"
+        - name: REDIS_HOST
+          value: "redis-server"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_SECRET
+          value: "20240703MiniprojectSecretKey"
+        ports:
+        - containerPort: 3000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-server
+  namespace: bank-namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        volumeMounts:
+        - name: nginx-certs
+          mountPath: /etc/nginx/certs
+        - name: nginx-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      volumes:
+      - name: nginx-certs
+        hostPath:
+          path: /path/to/certs
+      - name: nginx-config
+        configMap:
+          name: nginx-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-server
+  namespace: bank-namespace
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+  selector:
+    app: redis
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-server
+  namespace: bank-namespace
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+  selector:
+    app: mysql
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-server
+  namespace: bank-namespace
+spec:
+  ports:
+  - port: 8000
+    targetPort: 8000
+  selector:
+    app: backend
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-server
+  namespace: bank-namespace
+spec:
+  ports:
+  - port: 3000
+    targetPort: 3000
+  selector:
+    app: frontend
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-server
+  namespace: bank-namespace
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  - port: 443
+    targetPort: 443
+  selector:
+    app: nginx
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-data-pvc
+  namespace: bank-namespace
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-data-pvc
+  namespace: bank-namespace
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: bank-namespace
+data:
+  nginx.conf: |
+    # 여기에 nginx 설정을 추가하세요.
