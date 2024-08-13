@@ -4,15 +4,6 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # App-build:
-  #   - name: Front
-  #     uses:
-  #     path:
-
-  #   - name: Back
-  #     uses:
-  #     path:
-
   Dokcer-Login:
     runs-on: ubuntu-latest
     steps:
@@ -21,3 +12,31 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+  
+  Docker-Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Front Image Build
+        run: |
+          docker build -t choigunwoo/source-file:front ./project-private-fiels/Frontend
+          docker push choigunwoo/source-file:frontend
+
+      - name: Back Image Build
+        run: |
+          docker build -t choigunwoo/source-file:front ./project-private-fiels/Backend
+          docker push choigunwoo/source-file:Backend
+
+      - name: MySQL Image 
+        run: |
+          docker build -t choigunwoo/source-file:front ./project-private-fiels/MySQL
+          docker push choigunwoo/source-file:MySQL
+
+      - name: Redis Image Build
+        run: |
+          docker build -t choigunwoo/source-file:front ./project-private-fiels/Redis
+          docker push choigunwoo/source-file:Redis
+
+      - name: Nginx Image Build
+        run: |
+          docker build -t choigunwoo/source-file:front ./project-private-fiels/Nginx
+          docker push choigunwoo/source-file:Nginx
