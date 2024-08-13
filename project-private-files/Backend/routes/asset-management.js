@@ -40,8 +40,7 @@ router.get('/transactions', async function (req, res) {
         // 거래 내역 조회
         const [transactions] = await mysqldb.promise().query(query, queryParams);
 
-        console.log('전체 거래 내역 조회됨');
-
+        // console.log('전체 거래 내역 조회됨');
         return res.status(200).json(transactions);
     } catch (err) {
         console.error(err);
@@ -75,7 +74,7 @@ router.get('/account-balance/:accountNumber', async function (req, res) {
             return res.status(404).json({ message: '존재하지 않는 계좌입니다' });
         }
 
-        console.log('잔액 가져옴');
+        // console.log('잔액 가져옴');
         res.json(accounts[0]);
     } catch (error) {
         console.error('잔액 불러오기 오류:', error);

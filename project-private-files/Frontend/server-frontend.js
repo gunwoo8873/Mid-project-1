@@ -16,14 +16,6 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// HTTPS
-const https = require('https');
-const fs = require('fs');
-const options = {
-    key: fs.readFileSync('./rootca.key'),
-    cert: fs.readFileSync('./rootca.crt')
-};
-
 // Dotenv
 const dotenv = require('dotenv');
 dotenv.config();
@@ -56,8 +48,18 @@ app.use(function (err, req, res, next) {
 });
 
 // Listen
-https.createServer(options, app).listen(process.env.PORT, () => {
-    console.log(`Frontend Server Ready. https://127.0.0.1:${process.env.PORT}`);
+const port = process.env.PORT || 3000;
+app.listen(port, (err) => {
+    if (err) {
+        console.error('Error starting server:', err);
+        return;
+    }
+
+    if (process.env.NODE_ENV === 'production') {
+        console.log(`Frontend Server Production Ready. PORT: ${port}`);
+    } else {
+        console.log(`Frontend Server Ready. http://127.0.0.1:${port}`);
+    }
 });
 
 // Routes
@@ -65,5 +67,5 @@ app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
 app.use('/amm', require('./routes/asset-management'));
 app.use('/real-estate', require('./routes/real-estate'));
-app.use('/chatbot', require('./routes/chatbot'));
 app.use('/naverlogin', require('./routes/naverlogin'));
+app.use('/health', require('./routes/health'));

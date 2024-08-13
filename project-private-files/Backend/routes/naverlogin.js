@@ -4,7 +4,7 @@ let router = require('express').Router();
 const { setup } = require('../utils/setup_db');
 
 router.post('/checkUser', async (req, res) => {
-  console.log('checkUser!');
+  // console.log('checkUser!');
   const { mysqldb } = await setup();
   const { userid } = req.body;
   mysqldb.query('SELECT * FROM users WHERE userid = ?', [userid], (err, results) => {
@@ -24,7 +24,7 @@ router.post('/addUser', async (req, res) => {
       console.error(err);
       return res.status(500).json({ error: err });
     }
-    console.log('회원가입 완료');
+    // console.log('회원가입 완료');
     res.json({ results });
   });
 });

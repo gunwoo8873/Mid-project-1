@@ -3,7 +3,6 @@ const multer = require('multer');
 const fs = require('fs'); // fs.existsSync와 fs.mkdirSync를 사용하여 경로가 없을 때만 폴더를 생성합니다.
 const path = require('path');
 
-
 // /real-estate/
 router.post('/', async function (req, res) {
     return res.status(200).send();
@@ -12,7 +11,7 @@ router.post('/', async function (req, res) {
 // /real-estate/delete
 router.post('/delete', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/real-estate/delete', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/real-estate/delete`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -31,7 +30,7 @@ router.post('/delete', async function (req, res) {
 // /real-estate/selling
 router.post('/selling', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/real-estate/selling', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/real-estate/selling`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -54,7 +53,7 @@ router.get('/search', async function (req, res) {
     let page = req.query.page || 1;
     let itemsPerPage = req.query.itemsPerPage || 10;
     try {
-        const response = await fetch(`http://127.0.0.1:8000/real-estate/search?selectv=${req_selectv}&sword=${encodeURIComponent(req_sword)}&page=${page}&itemsPerPage=${itemsPerPage}`, {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/real-estate/search?selectv=${req_selectv}&sword=${encodeURIComponent(req_sword)}&page=${page}&itemsPerPage=${itemsPerPage}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -66,7 +65,14 @@ router.get('/search', async function (req, res) {
         const data = await response.json();
         // 요청 성공 여부에 따라 렌더링할 데이터와 함께 렌더링
         const csrfToken = req.csrfToken();
-        return res.render('real-estate/list.ejs', { data: data.real_estate, totalPages: data.totalPages, currentPage: data.currentPage, user: req.session.user, csrfToken });
+        return res.render('real-estate/list.ejs', { 
+            data: data.real_estate,
+            totalPages: data.totalPages,
+            currentPage: data.currentPage,
+            user: req.session.user,
+            csrfToken,
+            appkey: process.env.JAVASCRIPT_APPKEY
+        });
     } catch (error) {
         console.error(error);
         // 오류 처리
@@ -86,7 +92,7 @@ router.get('/', async function (req, res) {
     }
 
     try {
-        const response = await fetch(`http://127.0.0.1:8000/real-estate?page=${page}&itemsPerPage=${itemsPerPage}`, {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/real-estate?page=${page}&itemsPerPage=${itemsPerPage}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -94,11 +100,18 @@ router.get('/', async function (req, res) {
             },
         });
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
 
         // 요청 성공 여부에 따라 렌더링할 데이터와 함께 렌더링
         const csrfToken = req.csrfToken();
-        return res.render('real-estate/list.ejs', { data: data.real_estate, totalPages: data.totalPages, currentPage: data.currentPage, user: req.session.user, csrfToken });
+        return res.render('real-estate/list.ejs', {
+            data: data.real_estate,
+            totalPages: data.totalPages,
+            currentPage: data.currentPage,
+            user: req.session.user,
+            csrfToken,
+            appkey: process.env.JAVASCRIPT_APPKEY
+        });
     } catch (error) {
         console.error(error);
         // 오류 처리
@@ -145,7 +158,7 @@ router.post('/photo', upload.single('imagepath'), (req, res) => {
 
 router.post('/save', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/real-estate/save', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/real-estate/save`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -175,7 +188,7 @@ router.post('/save', async function (req, res) {
 router.post('/edit', async function (req, res) {
     imagepath = req.body.imagepath;
     try {
-        const response = await fetch('http://127.0.0.1:8000/real-estate/edit', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/real-estate/edit`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -205,7 +218,8 @@ router.post('/edit', async function (req, res) {
                 totalPages: data.totalPages,
                 currentPage: data.currentPage,
                 data: data,
-                csrfToken: req.csrfToken()
+                csrfToken: req.csrfToken(),
+                appkey: process.env.JAVASCRIPT_APPKEY
             });
         }
     } catch (error) {

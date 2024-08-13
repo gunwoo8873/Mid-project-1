@@ -9,7 +9,7 @@ router.post('/delete', async function (req, res) {
     }
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/auth/delete', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/auth/delete`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ router.get('/me', async function (req, res) {
     }
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/auth/edit-info', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/auth/edit-info`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -96,7 +96,7 @@ router.post('/edit', async function (req, res) {
     }
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/auth/edit', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/auth/edit`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -122,7 +122,7 @@ router.get('/edit', async function (req, res) {
     }
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/auth/edit-info', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/auth/edit-info`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -161,7 +161,7 @@ router.get('/login', function (req, res) {
 // 로그인
 router.post('/login', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/auth/login', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -206,7 +206,7 @@ router.get('/sign-up', function (req, res) {
 // 회원가입 폼에서 중복 아이디 검사
 router.post('/check-id', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/auth/check-id', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/auth/check-id`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -224,7 +224,7 @@ router.post('/check-id', async function (req, res) {
 // 회원가입 폼에서 중복 이메일 검사
 router.post('/check-email', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/auth/check-email', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/auth/check-email`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -242,7 +242,7 @@ router.post('/check-email', async function (req, res) {
 // 회원가입 - 유저 등록
 router.post('/sign-up', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/auth/sign-up', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/auth/sign-up`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

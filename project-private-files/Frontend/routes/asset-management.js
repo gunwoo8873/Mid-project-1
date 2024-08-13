@@ -14,7 +14,7 @@ router.get('/', async function (req, res) {
 // 자산관리 사용자 계좌 정보 불러오기
 router.get('/accounts', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/amm/accounts', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/amm/accounts`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ router.get('/transactions', async function (req, res) {
 
     if (!transactions) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/amm/transactions`, {
+            const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/amm/transactions`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ router.get('/account-balance/:accountNumber', async function (req, res) {
     }
 
     try {
-        const response = await fetch(`http://127.0.0.1:8000/amm/account-balance/${accountNumber}`, {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/amm/account-balance/${accountNumber}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ router.get('/account-balance/:accountNumber', async function (req, res) {
 // 자산관리 계좌 개설
 router.post('/create', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/amm/create', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/amm/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -156,7 +156,7 @@ router.post('/create', async function (req, res) {
 // 자산관리 입금 처리
 router.post('/deposit', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/amm/deposit', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/amm/deposit`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -180,7 +180,7 @@ router.post('/deposit', async function (req, res) {
 // 자산관리 출금 처리
 router.post('/withdraw', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/amm/withdraw', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/amm/withdraw`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -210,7 +210,7 @@ router.post('/withdraw', async function (req, res) {
 // 자산관리 송금 처리
 router.post('/transfer', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/amm/transfer', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/amm/transfer`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -234,7 +234,7 @@ router.post('/transfer', async function (req, res) {
 // 자산관리 환전 처리
 router.post('/exchange', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/amm/exchange', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/amm/exchange`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

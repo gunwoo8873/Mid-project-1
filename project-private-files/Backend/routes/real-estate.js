@@ -112,6 +112,9 @@ router.post('/edit', async function (req, res) {
     }
     const userId = userRows[0].id;
 
+    const sellingPrice = req.body.selling_price.replace(/,/g, '');
+    const jeonsePrice = req.body.jeonse_price.replace(/,/g, '');
+
     try {
         // MySQL 쿼리를 사용하여 데이터 수정
         let sql = `
@@ -125,8 +128,8 @@ router.post('/edit', async function (req, res) {
             req.body.city,
             req.body.area,
             req.body.imagepath,
-            req.body.selling_price,
-            req.body.jeonse_price,
+            sellingPrice,
+            jeonsePrice,
             req.body.id // 클라이언트에서 전송한 ID 필드를 추가하여 해당 레코드만 수정하도록 함
         ]);
 
@@ -138,6 +141,7 @@ router.post('/edit', async function (req, res) {
             return res.status(404).send({ alertMsg: '수정 실패', real_estate });
         }
     } catch (err) {
+        console.error('real-estate.error:', err);
         return res.status(500).send({ alertMsg: '서버 오류' });
     }
 });

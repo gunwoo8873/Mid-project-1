@@ -407,7 +407,7 @@
                     const initialDeposit = $('#initial-deposit').val();
                     const accountpw = $('#accountPw').val();
                     const accountpwCheck = $('#accountpw-check').val();
-                    console.log(accountAlias, initialDeposit, accountpw, accountpwCheck);
+                    // console.log(accountAlias, initialDeposit, accountpw, accountpwCheck);
                     if (!accountAlias || !initialDeposit || !accountpw || !accountpwCheck) {
                         alert('모든 정보를 입력해주세요');
                         return;
@@ -525,8 +525,7 @@
                     const formattedAmount = parseFloat(amount).toLocaleString();
                     const recieverAccount = $('#receiver-account').val();
                     const transferPw = $('#transferPw').val();
-
-                    console.log(selectedAccount, recieverAccount, amount, transferPw);
+                    // console.log(selectedAccount, recieverAccount, amount, transferPw);
 
                     if (!selectedAccount || !recieverAccount || !amount || !transferPw) {
                         alert('모든 정보를 입력해주세요');
