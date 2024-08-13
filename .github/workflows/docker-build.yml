@@ -1,0 +1,21 @@
+name: Docker CI/CD
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  # App-build:
+  #   - name: Front
+  #     uses:
+  #     path:
+
+  #   - name: Back
+  #     uses:
+  #     path:
+
+  Dokcer-Login:
+    - name: docker login 
+      uses: docker/login-action@v2
+      with: 
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
