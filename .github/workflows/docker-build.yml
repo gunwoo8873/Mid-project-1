@@ -19,10 +19,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: List files in the repository root for debugging
-        run: |
-          ls -R
-
       - name: Front Image Build
         run: |
           docker build -t choigunwoo/source-file:frontend ./project-private-files/Frontend
