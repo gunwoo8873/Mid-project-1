@@ -18,25 +18,25 @@ jobs:
     steps:
       - name: Front Image Build
         run: |
-          docker build -t choigunwoo/source-file:frontend ../../project-private-files/Frontend .
+          docker build -t choigunwoo/source-file:frontend ../../project-private-files/Frontend.
           docker push choigunwoo/source-file:frontend
 
       - name: Back Image Build
         run: |
-          docker build -t choigunwoo/source-file:backend ../../project-private-files/Backend .
+          docker build -t choigunwoo/source-file:backend ../../project-private-files/Backend.
           docker push choigunwoo/source-file:backend
 
       - name: MySQL Image 
         run: |
-          docker build -t choigunwoo/source-file:mysql ../../project-private-files/MySQL .
+          docker build -t choigunwoo/source-file:mysql ../../project-private-files/MySQL.
           docker push choigunwoo/source-file:mysql
 
       - name: Redis Image Build
         run: |
-          docker build -t choigunwoo/source-file:redis ../../project-private-files/Redis .
+          docker build -t choigunwoo/source-file:redis ../../project-private-files/Redis.
           docker push choigunwoo/source-file:redis
 
       - name: Nginx Image Build
         run: |
-          docker build -t choigunwoo/source-file:nginx ../../project-private-files/Nginx .
+          docker build -t choigunwoo/source-file:nginx ../../project-private-files/Nginx.
           docker push choigunwoo/source-file:nginx
