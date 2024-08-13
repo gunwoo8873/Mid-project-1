@@ -16,9 +16,12 @@ jobs:
   Docker-Build:
     runs-on: ubuntu-latest
     steps:
-      - name: List files for debugging
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: List files in the repository root for debugging
         run: |
-          ls -R ./project-private-files
+          ls -R
 
       - name: Front Image Build
         run: |
