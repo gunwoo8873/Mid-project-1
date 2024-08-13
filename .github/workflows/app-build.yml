@@ -1,0 +1,7 @@
+name: Github Action
+on:
+  branchs: [ "main" ]
+
+jobs:
+  front-deploy:
+  back-deploy:
