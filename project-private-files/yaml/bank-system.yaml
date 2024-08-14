@@ -51,21 +51,16 @@ data:
     http {
         include /etc/nginx/mime.types;
         default_type application/octet-stream;
-
+        
         server {
             listen 443 ssl;  # SSL을 사용하여 443 포트에서 수신
-            server_name 192.168.6.128;  # 도메인 이름 또는 IP
-
+            server_name _;  # 도메인 이름 or IP or _(모든 아이피)
+            
             ssl_certificate /etc/nginx/ssl/tls.crt;  # SSL 인증서 경로
             ssl_certificate_key /etc/nginx/ssl/tls.key;  # SSL 키 경로
-
-            ssl_protocols TLSv1.2 TLSv1.3;  # 사용할 SSL 프로토콜
-            ssl_ciphers 'HIGH:!aNULL:!MD5';  # 사용할 암호화 스위트
-
+            
             location / {
                 proxy_pass http://frontend-server:3000;  # 프론트엔드로 프록시
-                proxy_set_header Upgrade $http_upgrade;  # WebSocket 지원
-                proxy_set_header Connection 'upgrade';  # WebSocket 연결 유지
                 proxy_set_header Host $host;  # 원래 호스트 헤더 전달
                 proxy_set_header X-Real-IP $remote_addr;  # 클라이언트의 실제 IP 주소 전달
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  # 클라이언트의 IP 주소를 X-Forwarded-For 헤더에 추가
@@ -74,20 +69,13 @@ data:
 
             location /api {
                 proxy_pass http://backend-server:8000;  # 백엔드 서버 주소
-                proxy_set_header Upgrade $http_upgrade;  # WebSocket 지원
-                proxy_set_header Connection 'upgrade';  # WebSocket 연결 유지
                 proxy_set_header Host $host;  # 원래 호스트 헤더 전달
                 proxy_set_header X-Real-IP $remote_addr;  # 클라이언트의 실제 IP 주소 전달
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  # 클라이언트의 IP 주소를 X-Forwarded-For 헤더에 추가
                 proxy_set_header X-Forwarded-Proto $scheme;  # 요청의 프로토콜 (http 또는 https) 전달
             }
-        }
-
-        server {
-            listen 80;  # HTTP 요청을 수신하는 서버
-            server_name 192.168.6.128;  # 도메인 이름 또는 IP
-
-            return 301 https://$host$request_uri;  # 모든 HTTP 요청을 HTTPS로 리다이렉트
+            
+            error_page 497 https://$host:30443$request_uri;
         }
     }
 
@@ -232,11 +220,11 @@ spec:
         - name: BACKEND_PORT
           value: "8000"
         - name: CLIENT_ID
-          value: "_6vvNxz9b7hiBBvaP7T9"
+          value: "7hI4IYFb2ETaTtFDe95B"
         - name: CLIENT_SECRET
-          value: "j2JaqWr4EH"
+          value: "61qNdLSf9f"
         - name: REDIRECT_URI
-          value: "https://192.168.6.128/naverlogin/login"
+          value: "https://192.168.6.190:30443/naverlogin/login"
         - name: JAVASCRIPT_APPKEY
           value: "4b5ecb6281d617d7a988622ad24d251b"
         - name: REDIS_HOST
@@ -361,7 +349,6 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: pv-redis
-  namespace: bank-namespace
 spec:
   capacity:
     storage: 1Gi
@@ -375,7 +362,6 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: pv-mysql
-  namespace: bank-namespace
 spec:
   capacity:
     storage: 1Gi
