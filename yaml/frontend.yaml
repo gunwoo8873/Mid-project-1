@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: your-frontend-image:latest
+        env:
+        - name: PORT
+          value: "3000"
+        - name: NODE_ENV
+          value: "production"
+        - name: JWT_SECRET
+          value: "thisIsMySecretKey"
+        - name: BACKEND_HOST
+          value: "backend-service"
+        - name: BACKEND_PORT
+          value: "8000"
+        - name: CLIENT_ID
+          value: "_6vvNxz9b7hiBBvaP7T9"
+        - name: CLIENT_SECRET
+          value: "j2JaqWr4EH"
+        - name: REDIRECT_URI
+          value: "https://192.168.6.99/naverlogin/login"
+        - name: JAVASCRIPT_APPKEY
+          value: "4b5ecb6281d617d7a988622ad24d251b"
+        - name: REDIS_HOST
+          value: "redis-service"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_SECRET
+          value: "20240703MiniprojectSecretKey"
+        ports:
+        - containerPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000

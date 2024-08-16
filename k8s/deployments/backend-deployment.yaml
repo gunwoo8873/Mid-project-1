@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-server
+  namespace: bank-namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: jake2580/mid-bank-backend:v0.0.1
+        env:
+        - name: PORT
+          value: "8000"
+        - name: NODE_ENV
+          value: "production"
+        - name: MYSQL_HOST
+          value: "mysql-server"
+        - name: MYSQL_PORT
+          value: "3306"
+        - name: MYSQL_DATABASE
+          value: "mybank"
+        - name: MYSQL_USER
+          value: "student"
+        - name: MYSQL_PASSWORD
+          value: "abc123"
+        - name: REDIS_HOST
+          value: "redis-server"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_SECRET
+          value: "20240703MiniprojectSecretKey"
+        ports:
+        - containerPort: 8000
+

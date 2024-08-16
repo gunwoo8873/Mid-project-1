@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-server
+  namespace: bank-namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: jake2580/mid-bank-redis:v0.0.1
+        volumeMounts:
+        - mountPath: /data
+          name: redis-data
+        ports:
+        - containerPort: 6379
+      volumes:
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: redis-data-pvc

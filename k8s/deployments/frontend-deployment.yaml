@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-server
+  namespace: bank-namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: jake2580/mid-bank-frontend:v0.0.1
+        env:
+        - name: PORT
+          value: "3000"
+        - name: NODE_ENV
+          value: "production"
+        - name: JWT_SECRET
+          value: "thisIsMySecretKey"
+        - name: BACKEND_HOST
+          value: "backend-server"
+        - name: BACKEND_PORT
+          value: "8000"
+        - name: CLIENT_ID
+          value: "7hI4IYFb2ETaTtFDe95B"
+        - name: CLIENT_SECRET
+          value: "1Yt9Y3DRw9"
+        - name: REDIRECT_URI
+          value: "http://192.168.6.160/naverlogin/login"
+        - name: JAVASCRIPT_APPKEY
+          value: "8c5d619d1031b451f450fa5338eff279"
+        - name: REDIS_HOST
+          value: "redis-server"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_SECRET
+          value: "20240703MiniprojectSecretKey"
+        ports:
+        - containerPort: 3000

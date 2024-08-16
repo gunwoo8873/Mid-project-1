@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: bank-namespace
+data:
+  nginx.conf: |
+    worker_processes auto;
+
+    events {
+        worker_connections 1024;
+    }
+
+    http {
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+
+        server {
+            listen 80;
+            #listen 443 ssl;  # SSL을 사용하여 443 포트에서 수신
+            server_name _;  # 도메인 이름 or IP or _(모든 아이피)
+
+            #ssl_certificate /etc/nginx/ssl/tls.crt;  # SSL 인증서 경로
+            #ssl_certificate_key /etc/nginx/ssl/tls.key;  # SSL 키 경로
+
+            location / {
+                proxy_pass http://frontend-server:3000;  # 프론트엔드로 프록시
+                proxy_set_header Host $host;  # 원래 호스트 헤더 전달
+                proxy_set_header X-Real-IP $remote_addr;  # 클라이언트의 실제 IP 주소 전달
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  # 클라이언트의 IP 주소를 X-Forwarded-For 헤더에 추가
+                proxy_set_header X-Forwarded-Proto $scheme;  # 요청의 프로토콜 (http 또는 https) 전달
+            }
+
+            location /api {
+                proxy_pass http://backend-server:8000;  # 백엔드 서버 주소
+                proxy_set_header Host $host;  # 원래 호스트 헤더 전달
+                proxy_set_header X-Real-IP $remote_addr;  # 클라이언트의 실제 IP 주소 전달
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  # 클라이언트의 IP 주소를 X-Forwarded-For 헤더에 추가
+                proxy_set_header X-Forwarded-Proto $scheme;  # 요청의 프로토콜 (http 또는 https) 전달
+            }
+
+            #error_page 497 https://$host$request_uri;
+        }
+    }
