@@ -36,5 +36,4 @@ jobs:
     steps:
       # Error: Process completed with exit code 1.
       - name: Docker Hub push
-        uses: docker/build-push-action@v6
         run: docker push choigunwoo/source-file:backend
