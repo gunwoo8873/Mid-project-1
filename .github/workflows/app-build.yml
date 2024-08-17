@@ -2,8 +2,6 @@ name: Application CI
 on:
   push:
     branches: [ "main", "dev/**", "release/**", "feature/**", "hotfix/**" ]
-  pull_request:
-    branches: [ "dev/**", "release/**", "feature/**", "hotfix/**" ]
 
 jobs:
   build:

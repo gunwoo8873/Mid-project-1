@@ -1,29 +1,8 @@
-name: PR Label
+name: Pull-Request
 on:
   pull_request:
-    branches: [ "dev/**", "releas/**", "feature/**", "hotfix/**" ]
-    types: [opened]
-
-enable:
-  issues: false
-  prs: true
-
-labels:
-  'bug':
-    include:
-      - '\bfix\b'
-  'test':
-    include:
-      - '\btest\b'
-  'feature':
-    include:
-      - '\bfeat\b'
-  'documentation':
-    include:
-      - '\bdocs\b'
-  'refactor':
-    include:
-      - '\brefactor\b'
-  'chore':
-    include:
-      - '\bchore\b'
+    branches: [ "dev/**", "release/**", "feature/**", "hotfix/**" ]
+    labels:
+      type:
+jobs:
+  
