@@ -1,8 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-server
-  namespace: bank-namespace
+  name: frontend-deployment
+  labels:
+    app: frontend
 spec:
   replicas: 1
   selector:
@@ -15,7 +16,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: jake2580/mid-bank-frontend:v0.0.1
+        image: your-frontend-image:latest
         env:
         - name: PORT
           value: "3000"
@@ -24,22 +25,35 @@ spec:
         - name: JWT_SECRET
           value: "thisIsMySecretKey"
         - name: BACKEND_HOST
-          value: "backend-server"
+          value: "backend-service"
         - name: BACKEND_PORT
           value: "8000"
         - name: CLIENT_ID
-          value: "7hI4IYFb2ETaTtFDe95B"
+          value: "_6vvNxz9b7hiBBvaP7T9"
         - name: CLIENT_SECRET
-          value: "1Yt9Y3DRw9"
+          value: "j2JaqWr4EH"
         - name: REDIRECT_URI
-          value: "http://192.168.6.160/naverlogin/login"
+          value: "https://192.168.6.99/naverlogin/login"
         - name: JAVASCRIPT_APPKEY
-          value: "8c5d619d1031b451f450fa5338eff279"
+          value: "4b5ecb6281d617d7a988622ad24d251b"
         - name: REDIS_HOST
-          value: "redis-server"
+          value: "redis-service"
         - name: REDIS_PORT
           value: "6379"
         - name: REDIS_SECRET
           value: "20240703MiniprojectSecretKey"
         ports:
         - containerPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000

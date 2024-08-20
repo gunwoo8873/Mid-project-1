@@ -1,8 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-server
-  namespace: bank-namespace
+  name: mysql-deployment
+  labels:
+    app: mysql
 spec:
   replicas: 1
   selector:
@@ -15,7 +16,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: jake2580/mid-bank-mysql:v0.0.1
+        image: mysql:latest
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: "abc123"
@@ -28,9 +29,34 @@ spec:
         ports:
         - containerPort: 3306
         volumeMounts:
-        - mountPath: /var/lib/mysql
-          name: mysql-data
+        - name: mysql-storage
+          mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-data
+      - name: mysql-storage
         persistentVolumeClaim:
-          claimName: mysql-data-pvc
+          claimName: mysql-pvc
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  selector:
+    app: mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306

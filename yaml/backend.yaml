@@ -1,8 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-server
-  namespace: bank-namespace
+  name: backend-deployment
+  labels:
+    app: backend
 spec:
   replicas: 1
   selector:
@@ -15,14 +16,14 @@ spec:
     spec:
       containers:
       - name: backend
-        image: jake2580/mid-bank-backend:v0.0.1
+        image: your-backend-image:latest
         env:
         - name: PORT
           value: "8000"
         - name: NODE_ENV
           value: "production"
         - name: MYSQL_HOST
-          value: "mysql-server"
+          value: "mysql-service"
         - name: MYSQL_PORT
           value: "3306"
         - name: MYSQL_DATABASE
@@ -32,7 +33,7 @@ spec:
         - name: MYSQL_PASSWORD
           value: "abc123"
         - name: REDIS_HOST
-          value: "redis-server"
+          value: "redis-service"
         - name: REDIS_PORT
           value: "6379"
         - name: REDIS_SECRET
@@ -40,3 +41,15 @@ spec:
         ports:
         - containerPort: 8000
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
